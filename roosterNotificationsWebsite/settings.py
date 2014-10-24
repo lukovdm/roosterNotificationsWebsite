@@ -20,11 +20,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'or5!=3ru!y7j86c2y7n-a6*$qg)i^tb%(=bd%0g45=#uus#ge^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '192.168.192.64',
+    '95.96.114.222',
+]
 
 
 # Application definition
@@ -36,9 +39,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'south',
     'gunicorn',
     'register',
+    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,6 +87,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),

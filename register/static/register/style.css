@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #999;
+}
+
+input {
+    background-color: white;
+}
+
+.main {
+    border: solid;
+    padding-left: 1%;
+    float: right;
+    width: 39%;
+    height: 94%;
+    background-color: white;
+}
+
+.info {
+    border-style: solid;
+    float: left;
+    width: 59%;
+    height: 94%;
+    background-color: white;
+}
+
+.footer {
+    height: 4%;
+    border-style: groove;
+    background-color: white;
+    clear: both;
+    left: 0;
+    width: 100%;
+}
+
+p {
+    margin: 3px 0;
+}
