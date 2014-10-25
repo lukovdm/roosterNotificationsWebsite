@@ -1,5 +1,7 @@
 .idea/
 Tutorial/
+db.sqlite3
+.goutputstream-1A3VNX
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

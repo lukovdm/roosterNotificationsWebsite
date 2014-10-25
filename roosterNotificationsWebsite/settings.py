@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = (
+    'bootstrap3',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +42,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'gunicorn',
     'register',
-    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (
