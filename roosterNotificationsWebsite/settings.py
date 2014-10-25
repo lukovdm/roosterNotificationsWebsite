@@ -27,6 +27,8 @@ TEMPLATE_DEBUG = False
 ALLOWED_HOSTS = [
     '192.168.192.64',
     '95.96.114.222',
+    'lesuitval.info',
+    'www.lesuitval.info',
 ]
 
 

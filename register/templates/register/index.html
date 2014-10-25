@@ -12,31 +12,57 @@
           <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <title>rooster wijzigingen</title>
+        <title>les uitval</title>
     </head>
     <body>
+        <div class="jumbotron">
+            <div class="container">
+                <div class="bounding-box"></div>
+                <h1>A life saving app</h1>
+                <p>You like to be notified about cancelled classes right away? Try this!</p>
+
+            </div>
+        </div>
         <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="glyphicon glyphicon-info-sign"></span>
+                    <p class="colum-text">
+                        1) Install <a href="http://www.pushbullet.com" target="_blank">pushbullet</a> on your phone
+                        <br>
+                        2) Look up your “leerlingnummer”
+                        <br>
+                        3) Fill in leerlingnummer and email address
+                        <br>
+                        That’s all!
+                        <br>
+                        For Hyperion timetable only
+                    </p>
+                    <p class="colum-text">{{ object_list.count }} people already subscribed.</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="glyphicon glyphicon-ok-sign"></span>
+                    <form action="{%  url 'register:add' %}" method="POST" class="form-signin" role="form"> {% csrf_token %}
+                        {% if error_message %}<p style="color: red;"><strong>{{ error_message }}</strong></p>{% endif %}
 
-            <form action="{%  url 'register:add' %}" method="POST" class="form-signin" role="form"> {% csrf_token %}
-                <h2 class="form-signin-heading">add user</h2>
-                {% if error_message %}<p style="color: red;"><strong>{{ error_message }}</strong></p>{% endif %}
-
-                <input placeholder="leerlingnummer" type="number" name="number" class="form-control" required>
-                <input placeholder="email" type="email" name="email" class="form-control" required>
-                <button type="submit" class="btn btn-lg btn-primary btn-block">Subscribe</button>
-            </form>
-
-            <form action="{%  url 'register:remove' %}" method="POST" class="form-signin" role="form"> {% csrf_token %}
-                <h2 class="form-signin-heading">remove user</h2>
-
-                <input placeholder="leerlingnummer" type="number" name="number" id="number" class="form-control" required>
-                <button type="submit" class="btn btn-lg btn-primary btn-block">Unsubscribe</button>
-            </form>
-
-            <p>{{ object_list.count }} mensen krijgen realtime updates over het rooster.</p>
-
-            <div class="footer">
-                <p>DISCLAIMER: Deze site is niet verantwoordelijk voor te laat komen!!!</p>
+                        <input placeholder="leerlingnummer" type="number" name="number" class="form-control" required>
+                        <input placeholder="email" type="email" name="email" class="form-control" required>
+                        <button type="submit" class="btn btn-lg btn-primary btn-block">Subscribe</button>
+                    </form>
+                </div>
+                <div class="col-md-4">
+                    <span class="glyphicon glyphicon-remove-sign"></span>
+                    <form action="{%  url 'register:remove' %}" method="POST" class="form-signin" role="form"> {% csrf_token %}
+                        <input placeholder="leerlingnummer" type="number" name="number" class="form-control" required>
+                        <button type="submit" class="btn btn-lg btn-primary btn-block">Unsubscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="container">
+                <p class="text-muted"> <br/> DISCLAIMER: I take no responsibility for missed classes <br/>
+                    Made by: Luko van der Maas</p>
             </div>
         </div>
     </body>
