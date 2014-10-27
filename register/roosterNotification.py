@@ -68,8 +68,10 @@ for user in c.execute('SELECT * FROM register_user'):
                 text += part[0] + " " + part[1] + " " + part[2] + "\n"
             else:
                 text += part[0] + "\n"
+        if text == "":
+            text = "Geen roosterwijzigingen"
 
-        # print text
+        print text
         success, push = pb_user.push_note("Rooster wijzigingen", text)
 
 conn.close()

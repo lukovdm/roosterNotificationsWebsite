@@ -1,5 +1,5 @@
 #! /bin/bash
-gunicorn --reload roosterNotificationsWebsite.wsgi:application
+sudo supervisorctl restart gunicorn
 echo reloaded server
-python manage.py collectstatic -l
+python manage.py collectstatic -l --noinput
 echo reloaded static files

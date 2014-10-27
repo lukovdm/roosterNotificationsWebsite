@@ -2,6 +2,7 @@
     <head>
         {% load staticfiles %}
         <meta charset="utf-8">
+        <meta name="google-site-verification" content="VrsFdq9Wgaw9AV7ylFsPfGdceIcc2FJlWyL1gbNq7XE" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -17,10 +18,10 @@
     <body>
         <div class="jumbotron">
             <div class="container">
-                <div class="bounding-box"></div>
+                <a href="{% url 'register:index' %}"><div class="bounding-box"></div></a>
                 <h1>A life saving app</h1>
                 <p>You like to be notified about cancelled classes right away? Try this!</p>
-
+                <p class="colum-text">{{ object_list.count }} people already subscribed.</p>
             </div>
         </div>
         <div class="container">
@@ -35,26 +36,36 @@
                         3) Fill in leerlingnummer and email address
                         <br>
                         That’s all!
-                        <br>
+                        <br><br>
                         For Hyperion timetable only
                     </p>
-                    <p class="colum-text">{{ object_list.count }} people already subscribed.</p>
                 </div>
                 <div class="col-md-4">
                     <span class="glyphicon glyphicon-ok-sign"></span>
                     <form action="{%  url 'register:add' %}" method="POST" class="form-signin" role="form"> {% csrf_token %}
-                        {% if error_message %}<p style="color: red;"><strong>{{ error_message }}</strong></p>{% endif %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if "Add" in message.tags or "AddSucces" in message.tags %}<p class="{{ message.tags }}"><strong>{{ message }}</strong></p>{% endif %}
+                            {% endfor %}
+                        {% endif %}
 
                         <input placeholder="leerlingnummer" type="number" name="number" class="form-control" required>
                         <input placeholder="email" type="email" name="email" class="form-control" required>
-                        <button type="submit" class="btn btn-lg btn-primary btn-block">Subscribe</button>
+                        <button type="submit" class="btn btn-lg btn-primary btn-block btn-success">Add</button>
                     </form>
                 </div>
                 <div class="col-md-4">
                     <span class="glyphicon glyphicon-remove-sign"></span>
                     <form action="{%  url 'register:remove' %}" method="POST" class="form-signin" role="form"> {% csrf_token %}
+                        {% if messages %}
+                        {% for message in messages %}
+                            {% if "Delete" in message.tags or "DeleteSucces" in message.tags %}<p class="{{ message.tags }}"><strong>{{ message }}</strong></p>{% endif %}
+                        {% endfor %}
+                        {% endif %}
+
                         <input placeholder="leerlingnummer" type="number" name="number" class="form-control" required>
-                        <button type="submit" class="btn btn-lg btn-primary btn-block">Unsubscribe</button>
+                        <input placeholder="email" type="email" name="email" class="form-control" required>
+                        <button type="submit" class="btn btn-lg btn-primary btn-block btn-danger">Delete</button>
                     </form>
                 </div>
             </div>
@@ -62,7 +73,7 @@
         <div class="footer">
             <div class="container">
                 <p class="text-muted"> <br/> DISCLAIMER: I take no responsibility for missed classes <br/>
-                    Made by: Luko van der Maas</p>
+                    Made by: <a href="mailto:lukovandermaas@gmail.com?subject=Lesuitval.info" target="_blank">Luko van der Maas</a></p>
             </div>
         </div>
     </body>
