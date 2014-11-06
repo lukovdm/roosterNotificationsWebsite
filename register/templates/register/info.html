@@ -1,0 +1,36 @@
+<p>
+    Project Lesuitval.info<br/>
+    Goal: <br/>
+    Hyperion Lyceum publishes changes in the school timetable per student on their website.
+    Students have to check for cancelations of lessons by visiting this website.
+    The goal of this project is to push this info to their phones automatically.<br/>
+    Solution:<br/>
+    Hyperion students register email and student number on my website.
+    My server checks for timetable changes regularly and send pushbullets to their phones whenever a cancelation of lessons is detected.
+    Pushbullet is a push application available for most phones. <br/>
+    Project details:
+</p>
+<ul>
+    <li>Server runs on my Raspberry Pi with Raspbian installed.</li>
+    <li>I use the Django Framework with Gunicorn under Supervisorctl.</li>
+    <li>Static files by Nginx * SQLite3 for the database.</li>
+    <li>Cron job runs a bash file that runs a Python script</li>
+    <li>Pushbullet communication by Python library Pushbullet.py</li>
+    <li>Python script:
+        <ol>
+            <li>Detects time table changes with Regular expressions on individualized website:<br/>
+                <a href="http://gepro.nl/roosters/rooster.php?wijzigingen=1&amp;leerling=1102053&amp;type=Leerlingrooster&amp;afdeling=schooljaar2014-2015_OVERIG&amp;school=1814" target="_blank" >http://gepro.nl/roosters/<wbr>rooster.php?wijzigingen=1&amp;<wbr>leerling=1102053&amp;type=<wbr>Leerlingrooster&amp;afdeling=<wbr>schooljaar2014-2015_OVERIG&amp;<wbr>school=1814</a></li>
+            <li>where "leerlingnummer" 1102053 varies per student.</li>
+        </ol>
+    </li>
+    <li>Input validation:
+        <ol>
+            <li>Only valid email addresses</li>
+            <li>"leerlingnummer" must be a number</li>
+            <li>Unsubscribing requires existing email and leerlingnumber in database</li>
+        </ol>
+    </li>
+    <li>Domain registration Lesuitval.info</li>
+    <li>I use Bootstrap3 for css webdesign</li>
+    <li>Code management by Github versioning</li>
+</ul>

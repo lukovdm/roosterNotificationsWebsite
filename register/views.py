@@ -16,6 +16,9 @@ class IndexView(generic.ListView):
     model = User
     template_name = 'register/index.html'
 
+class InfoView(generic.TemplateView):
+    template_name = 'register/info.html'
+
 def add(request):
     user = User(number=request.POST["number"], email=request.POST["email"], updated=datetime.datetime.now() - datetime.timedelta(days=30))
     pb = registerPushbullet()
@@ -24,10 +27,7 @@ def add(request):
     try:
         pb_user.push_note("Welcome to lesuitval.info " + str(request.POST["number"]), "Timetable updates will follow automatically.")
     except:
-        # return render(request, 'register/index.html', {
-        #     'error_message_subscribe': "Email already in use.",
-        #     })
-        messages.warning(request, "Email already in use.", extra_tags="Add")
+        messages.error(request, "Email already in use.", extra_tags="Add")
     else:
         user.save()
         messages.success(request, "%s succesfully added with email: %s" % (request.POST["number"], request.POST["email"]), extra_tags="AddSucces")
@@ -37,10 +37,7 @@ def remove(request):
     pb = registerPushbullet()
     delete_users = [i for i in pb.contacts if (i.name == str(request.POST["number"]) and i.email == str(request.POST["email"]))]
     if not delete_users:
-        # return render(request, 'register/index.html', {
-        #     'error_message_unsubscribe': "User does not exit.",
-        #     })
-        messages.warning(request, "User does not exit.", extra_tags="Delete")
+        messages.error(request, "User does not exit.", extra_tags="Delete")
     else:
         for delete_user in delete_users:
             delete_user.push_note("Thanks for using this site", "You have signed off.")

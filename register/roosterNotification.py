@@ -17,7 +17,7 @@ for user in c.execute('SELECT * FROM register_user'):
         leerlingnummer) + "&type=Leerlingrooster&afdeling=schooljaar2014-2015_OVERIG&wijzigingen=1&school=1814"
     htmlPage = urllib2.urlopen(url).read()
 
-    lastChangedPat = re.compile('([0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9])')
+    lastChangedPat = re.compile('([0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9] [0-9]+:[0-9][0-9]:[0-9][0-9])')
     dateStr = re.search(lastChangedPat, htmlPage).group()
     date = datetime.strptime(dateStr, "%d-%m-%Y %H:%M:%S")
     db_date = datetime.strptime(str(user[2]), "%Y-%m-%d %H:%M:%S.%f")

@@ -1,1 +1,16 @@
-/home/pi/local/lib/python2.7/site-packages/django/contrib/admin/static/admin/css/changelists.css
+/* CHANGELISTS */
+
+.change-list .hiddenfields { display:none; }
+
+/* ACTIONS */
+
+.actions span.all,
+.actions span.action-counter,
+.actions span.clear,
+.actions span.question {
+    display: none;
+}
+
+#action-toggle {
+    display: none;
+}
