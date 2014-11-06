@@ -5,12 +5,13 @@ from operator import itemgetter
 import sqlite3
 
 conn = sqlite3.connect('../db.sqlite3')
-c = conn.cursor()
+cur = conn.cursor()
+cur_update = conn.cursor()
 
 key = "PwmEg59jL6KjS2N0e6BjX3IEs2LpadYs"
 pb = PushBullet(key)
 
-for user in c.execute('SELECT * FROM register_user'):
+for user in cur.execute('SELECT * FROM register_user'):
     print user
     leerlingnummer = user[3]
     url = "http://gepro.nl/roosters/rooster.php?leerling=" + str(
@@ -25,10 +26,9 @@ for user in c.execute('SELECT * FROM register_user'):
         print "nothing new for " + str(leerlingnummer)
         continue
 
-    c.execute("UPDATE register_user SET updated=? WHERE number=?", (str(datetime.now()), leerlingnummer))
-    conn.commit()
+    cur_update.execute("UPDATE register_user SET updated=? WHERE number=? AND email=?", (str(datetime.now()), leerlingnummer, user[1]))
 
-    pb_users = [i for i in pb.contacts if i.name == str(leerlingnummer)]
+    pb_users = [i for i in pb.contacts if (i.name == str(leerlingnummer) and i.email == str(user[1]))]
     for pb_user in pb_users:
         print pb_user
         parts = []
@@ -74,4 +74,5 @@ for user in c.execute('SELECT * FROM register_user'):
         print text
         success, push = pb_user.push_note("Rooster wijzigingen", text)
 
+conn.commit()
 conn.close()

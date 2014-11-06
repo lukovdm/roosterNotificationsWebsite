@@ -19,8 +19,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 from django.contrib.messages import constants as message_constants
 MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
 
+(('Luko', 'lukovandermaas@gmail.com'))
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'or5!=3ru!y7j86c2y7n-a6*$qg)i^tb%(=bd%0g45=#uus#ge^'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -28,9 +31,11 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = [
-    '192.168.192.64',
-    '95.96.114.222',
+    'server.lesuitval',
+    '146.185.190.19',
+    '127.0.0.1',
     'lesuitval.info',
+    '.lesuitval.info',
     'www.lesuitval.info',
 ]
 
