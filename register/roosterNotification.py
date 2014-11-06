@@ -8,7 +8,8 @@ conn = sqlite3.connect('../db.sqlite3')
 cur = conn.cursor()
 cur_update = conn.cursor()
 
-key = "PwmEg59jL6KjS2N0e6BjX3IEs2LpadYs"
+with open('/etc/api_key.txt') as f:
+    key = f.read().strip()
 pb = PushBullet(key)
 
 for user in cur.execute('SELECT * FROM register_user'):

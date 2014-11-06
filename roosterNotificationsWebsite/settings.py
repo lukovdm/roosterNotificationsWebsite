@@ -22,7 +22,8 @@ MESSAGE_TAGS = {message_constants.ERROR: 'danger'}
 (('Luko', 'lukovandermaas@gmail.com'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'or5!=3ru!y7j86c2y7n-a6*$qg)i^tb%(=bd%0g45=#uus#ge^'
+with open('/etc/secret_key.txt') as f:
+    SECRET_KEY = f.read().strip()
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
