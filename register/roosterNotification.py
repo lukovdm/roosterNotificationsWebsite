@@ -34,7 +34,7 @@ for user in cur.execute('SELECT * FROM register_user'):
         print pb_user
         parts = []
         stage = 0
-        changePat = re.compile('class="tableCell(New|Removed)">(y([0-9]+)|[a-z]+)')
+        changePat = re.compile('class="tableCell(New|Removed)">(y([0-9]+)|[a-z]+|\?)')
         hourPat = re.compile('width="50" class="tableHeader">([0-9])e uur')
         dayPat = re.compile('<td align="left" width="auto" class="tableCell">')
 
@@ -63,7 +63,9 @@ for user in cur.execute('SELECT * FROM register_user'):
         days = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag"]
         text = ""
         parts = sorted(parts, key=itemgetter(-1))
+        print parts
         for part in parts:
+            print part
             text += str(days[part[-1]-1]) + " " + part[-2] + "e uur "
             if len(part) == 5:
                 text += part[0] + " " + part[1] + " " + part[2] + "\n"
