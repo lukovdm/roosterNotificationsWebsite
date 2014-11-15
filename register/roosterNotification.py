@@ -14,9 +14,16 @@ pb = PushBullet(key)
 
 for user in cur.execute('SELECT * FROM register_user'):
     print user
-    leerlingnummer = user[3]
-    url = "http://gepro.nl/roosters/rooster.php?leerling=" + str(
-        leerlingnummer) + "&type=Leerlingrooster&afdeling=schooljaar2014-2015_OVERIG&wijzigingen=1&school=1814"
+    student = bool(user[4])
+    email = user[1]
+    if student:
+        iden = user[3]
+        url = "http://gepro.nl/roosters/rooster.php?leerling=" + str(
+            iden) + "&type=Leerlingrooster&afdeling=schooljaar2014-2015_OVERIG&wijzigingen=1&school=1814"
+    else:
+        iden = user[5]
+        url = "http://gepro.nl/roosters/rooster.php?docenten%5B%5D=" + str(
+            iden) + "&type=Docentrooster&wijzigingen=1&school=1814"
     htmlPage = urllib2.urlopen(url).read()
 
     lastChangedPat = re.compile('([0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9] [0-9]+:[0-9][0-9]:[0-9][0-9])')
@@ -24,18 +31,20 @@ for user in cur.execute('SELECT * FROM register_user'):
     date = datetime.strptime(dateStr, "%d-%m-%Y %H:%M:%S")
     db_date = datetime.strptime(str(user[2]), "%Y-%m-%d %H:%M:%S.%f")
     if date - db_date < timedelta():
-        print "nothing new for " + str(leerlingnummer)
+        print "nothing new for " + str(iden)
         continue
 
-    cur_update.execute("UPDATE register_user SET updated=? WHERE number=? AND email=?", (str(datetime.now()), leerlingnummer, user[1]))
+    if student:
+        cur_update.execute("UPDATE register_user SET updated=? WHERE number=? AND email=?", (str(datetime.now()), iden, email))
+    else:
+        cur_update.execute("UPDATE register_user SET updated=? WHERE teacher=? AND email=?", (str(datetime.now()), iden, email))
 
-    pb_users = [i for i in pb.contacts if (i.name == str(leerlingnummer) and i.email == str(user[1]))]
+    pb_users = [i for i in pb.contacts if (i.name == str(iden) and i.email == str(email))]
     for pb_user in pb_users:
-        print pb_user
         parts = []
         stage = 0
-        changePat = re.compile('class="tableCell(New|Removed)">(y([0-9]+)|[a-z]+|\?)')
-        hourPat = re.compile('width="50" class="tableHeader">([0-9])e uur')
+        changePat = re.compile('class="tableCell(New|Removed)">(y([0-9]*[a-z]*)|[a-z]+|\?)')
+        hourPat = re.compile('class="tableHeader">([0-9])e uur')
         dayPat = re.compile('<td align="left" width="auto" class="tableCell">')
 
         for change in re.finditer(changePat, htmlPage):
@@ -60,19 +69,17 @@ for user in cur.execute('SELECT * FROM register_user'):
                     day = re.findall(dayPat, htmlPage[hour.end():change.start()])
                     parts[-1].append(len(day))
 
-        days = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag"]
+        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
         text = ""
         parts = sorted(parts, key=itemgetter(-1))
-        print parts
         for part in parts:
-            print part
-            text += str(days[part[-1]-1]) + " " + part[-2] + "e uur "
+            text += str(days[part[-1]-1]) + " " + part[-2] + ("st " if part[-2] == "1" else ("nd " if part[-2] == "2" else "th ")) + "hour "
             if len(part) == 5:
                 text += part[0] + " " + part[1] + " " + part[2] + "\n"
             else:
                 text += part[0] + "\n"
         if text == "":
-            text = "Geen roosterwijzigingen"
+            text = "No changes in timetable."
 
         print text
         success, push = pb_user.push_note("Rooster wijzigingen", text)

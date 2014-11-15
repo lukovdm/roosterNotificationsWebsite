@@ -21,16 +21,22 @@ class InfoView(generic.TemplateView):
     template_name = 'register/info.html'
 
 def add(request):
-    if not unicode.isdigit(request.POST["number"]):
-        messages.error(request, "Please enter a valid leerlingnumber.", extra_tags="Add")
+    if not unicode.isdigit(request.POST["number"]) and (not unicode.isalpha(request.POST["number"]) or not len(request.POST["number"]) == 3):
+        if not unicode.isalpha(request.POST["number"]) or not len(request.POST["number"]) == 3:
+            messages.error(request, "Please enter a valid 3 letter teacher code.", extra_tags="Add")
+        else:
+            messages.error(request, "Please enter a valid leerlingnumber.", extra_tags="Add")
     elif not "@" in request.POST["email"]:
         messages.error(request, "Please enter a valid email address.", extra_tags="Add")
     elif request.POST["email"] == u'luko.maas@hyperionlyceum.nl':
         messages.error(request, "You want to go to hell?", extra_tags="Add")
     else:
-        user = User(number=request.POST["number"], email=request.POST["email"], updated=datetime.datetime.now() - datetime.timedelta(days=30))
+        if unicode.isalpha(request.POST["number"]) and len(request.POST["number"]) == 3:
+            user = User(teacher=request.POST["number"], email=request.POST["email"], updated=datetime.datetime.now() - datetime.timedelta(days=30), student=False)
+        else:
+            user = User(number=request.POST["number"], email=request.POST["email"], updated=datetime.datetime.now() - datetime.timedelta(days=30), student=True)
         pb = registerPushbullet()
-        success, pb_user = pb.new_contact(str(user.number), str(user.email))
+        success, pb_user = pb.new_contact(str(user.teacher) if unicode.isalpha(request.POST["number"]) and len(request.POST["number"]) == 3 else str(user.number), str(user.email))
 
         try:
             pb_user.push_note("Welcome to lesuitval.info " + str(request.POST["number"]), "Timetable updates will follow automatically.")
@@ -43,7 +49,10 @@ def add(request):
 
 def remove(request):
     if not unicode.isdigit(request.POST["number"]):
-        messages.error(request, "Please enter a valid leerlingnumber.", extra_tags="Delete")
+        if not unicode.isalpha(request.POST["number"]) or not len(request.POST["number"]) == 3:
+            messages.error(request, "Please enter a valid 3 letter teacher code.", extra_tags="Delete")
+        else:
+            messages.error(request, "Please enter a valid leerlingnumber.", extra_tags="Delete")
     elif not "@" in request.POST["email"]:
         messages.error(request, "Please enter a valid email address.", extra_tags="Delete")
     else:
@@ -55,6 +64,9 @@ def remove(request):
             for delete_user in delete_users:
                 delete_user.push_note("Thanks for using this site", "You have signed off.")
                 pb.remove_contact(delete_user)
-            User.objects.filter(number=request.POST["number"]).filter(email=request.POST["email"]).delete()
+            if unicode.isalpha(request.POST["number"]) and len(request.POST["number"]) == 3:
+                User.objects.filter(teacher=request.POST["number"]).filter(email=request.POST["email"]).delete()
+            else:
+                User.objects.filter(number=request.POST["number"]).filter(email=request.POST["email"]).delete()
             messages.success(request, "%s succesfully deteled with email: %s" % (request.POST["number"], request.POST["email"]), extra_tags="DeleteSucces")
     return HttpResponseRedirect(reverse('register:index'))

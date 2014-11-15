@@ -1,38 +1,76 @@
-<p>
-    Project Lesuitval.info<br/>
-    Goal: <br/>
-    Hyperion Lyceum publishes changes in the school timetable per student on their website.
-    Students have to check for cancelations of lessons by visiting this website.
-    The goal of this project is to push this info to their phones automatically.<br/>
-    Solution:<br/>
-    Hyperion students register email and student number on my website.
-    My server checks for timetable changes regularly and send pushbullets to their phones whenever a cancelation of lessons is detected.
-    Pushbullet is a push application available for most phones. <br/>
-    Project details:
-</p>
-<ul>
-    <li>Server runs on digitalocean VPS with ubuntu 14.10 x32 installed.</li>
-    <li>I use the Django Framework with Gunicorn under Supervisorctl.</li>
-    <li>Static files by Nginx.</li>
-    <li>SQLite3 for the database.</li>
-    <li>Cron job runs a bash file that runs a Python script</li>
-    <li>Pushbullet communication by Python library Pushbullet.py</li>
-    <li>Python script:
-        <ol>
-            <li>Detects time table changes with Regular expressions on individualized website:<br/>
-                <a href="http://gepro.nl/roosters/rooster.php?wijzigingen=1&amp;leerling=1102053&amp;type=Leerlingrooster&amp;afdeling=schooljaar2014-2015_OVERIG&amp;school=1814" target="_blank" >http://gepro.nl/roosters/<wbr>rooster.php?wijzigingen=1&amp;<wbr>leerling=1102053&amp;type=<wbr>Leerlingrooster&amp;afdeling=<wbr>schooljaar2014-2015_OVERIG&amp;<wbr>school=1814</a></li>
-            <li>where "leerlingnummer" 1102053 varies per student.</li>
-        </ol>
-    </li>
-    <li>Input validation:
-        <ol>
-            <li>Only valid email addresses</li>
-            <li>"leerlingnummer" must be a number</li>
-            <li>Unsubscribing requires existing email and leerlingnumber in database</li>
-        </ol>
-    </li>
-    <li>Domain registration Lesuitval.info</li>
-    <li>I use Bootstrap3 for css webdesign</li>
-    <li>Code management by Github versioning</li>
-    <li>my code can be found on <a href="https://github.com/okul1999/roosterNotificationsWebsite">github</a></li>
-</ul>
+<html>
+    <head>
+        {% load staticfiles %}
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'register/style.css' %}" rel="stylesheet">
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <title>Lesuitval - Info</title>
+    </head>
+    <body>
+    <div class="jumbotron">
+        <div class="container">
+            <a href="{% url 'register:index' %}"><div class="bounding-box"></div></a>
+            <h1>Project Lesuitval.info</h1>
+            <p>How it's made.</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Goal</h2>
+                <p class="colum-text">
+                    Hyperion Lyceum publishes changes in the school timetable per student on their website.
+                    Students have to check for cancelations of lessons by visiting this website.
+                    The goal of this project is to push this info to their phones automatically.
+                </p>
+            </div>
+            <div class="col-md-6">
+                <h2>Solution</h2>
+                <p class="colum-text">
+                    Hyperion students register email and student number on my website.
+                    My server checks for timetable changes regularly and send pushbullets to their phones whenever a cancelation of lessons is detected.
+                    Pushbullet is a push application available for most phones.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Project details</h2>
+                <ul>
+                    <li>Server runs on Digitalocean VPS with Ubuntu 14.10 x32 installed.</li>
+                    <li>I use the Django Framework with Gunicorn under Supervisor.</li>
+                    <li>Static files are served by Nginx.</li>
+                    <li>SQLite3 for the database.</li>
+                    <li>Cron job runs a bash file that runs a Python script</li>
+                    <li>Pushbullet communication by Python library Pushbullet.py</li>
+                    <li>Python script:
+                        <ol>
+                            <li>Detects time table changes with Regular expressions on individualized website:<br/>
+                                <a href="http://gepro.nl/roosters/rooster.php?wijzigingen=1&amp;leerling=1102053&amp;type=Leerlingrooster&amp;afdeling=schooljaar2014-2015_OVERIG&amp;school=1814" target="_blank" >http://gepro.nl/roosters/<wbr>rooster.php?wijzigingen=1&amp;<wbr>leerling=1102053&amp;type=<wbr>Leerlingrooster&amp;afdeling=<wbr>schooljaar2014-2015_OVERIG&amp;<wbr>school=1814</a></li>
+                            <li>where "leerlingnummer" 1102053 varies per student.</li>
+                        </ol>
+                    </li>
+                    <li>Input validation:
+                        <ol>
+                            <li>Only valid email addresses</li>
+                            <li>"leerlingnummer" must be a number</li>
+                            <li>Unsubscribing requires existing email and leerlingnumber in database</li>
+                        </ol>
+                    </li>
+                    <li>Domain registration Lesuitval.info</li>
+                    <li>I use Bootstrap3 for css webdesign</li>
+                    <li>Code management by Github versioning</li>
+                    <li>my code can be found on <a href="https://github.com/okul1999/roosterNotificationsWebsite">github</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
