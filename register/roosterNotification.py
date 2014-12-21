@@ -19,7 +19,7 @@ for user in cur.execute('SELECT * FROM register_user'):
     if student:
         iden = user[3]
         url = "http://gepro.nl/roosters/rooster.php?leerling=" + str(
-            iden) + "&type=Leerlingrooster&afdeling=schooljaar2014-2015_OVERIG&wijzigingen=1&school=1814"
+            iden) + "&type=Leerlingrooster&afdeling=schooljaar2014-2015_OVERIG&wijzigingen=1&school=1814&tabblad=1"
     else:
         iden = user[5]
         url = "http://gepro.nl/roosters/rooster.php?docenten%5B%5D=" + str(
@@ -80,8 +80,17 @@ for user in cur.execute('SELECT * FROM register_user'):
                 text += part[0] + "\n"
         if text == "":
             text = "No changes in timetable."
-        print text
-        success, push = pb_user.push_note("Rooster wijzigingen", text)
+
+        if user[6] == text:
+            print "time changed, no update"
+        else:
+            if student:
+                cur_update.execute("UPDATE register_user SET lastText=? WHERE number=? AND email=?", (text, iden, email))
+            else:
+                cur_update.execute("UPDATE register_user SET lastText=? WHERE teacher=? AND email=?", (text, iden, email))
+
+            print text
+            success, push = pb_user.push_note("Rooster wijzigingen", text)
 
 conn.commit()
 conn.close()

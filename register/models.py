@@ -6,6 +6,7 @@ class User(models.Model):
     email = models.EmailField()
     updated = models.DateTimeField()
     student = models.BooleanField(default=True)
+    lastText = models.TextField(default="")
 
     def __unicode__(self):
         return str(self.number) + str(self.email)
