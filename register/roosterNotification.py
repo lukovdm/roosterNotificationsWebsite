@@ -89,8 +89,10 @@ for user in cur.execute('SELECT * FROM register_user'):
             else:
                 cur_update.execute("UPDATE register_user SET lastText=? WHERE teacher=? AND email=?", (text, iden, email))
 
+            cur_update.execute("SELECT Count(*) FROM register_user")
+            text  += "\nHelp us grow.\nNow %s users, tell your friends" % cur_update.fetchone()[0]
             print text
-            success, push = pb_user.push_note("Rooster wijzigingen", text)
+            success, push = pb_user.push_note("lesuitval.info", text)
 
 conn.commit()
 conn.close()
