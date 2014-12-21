@@ -3,6 +3,7 @@ Tutorial/
 db.sqlite3
 .goutputstream-1A3VNX
 SECRET_KEY
+reload.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
