@@ -80,7 +80,6 @@ for user in cur.execute('SELECT * FROM register_user'):
                 text += part[0] + "\n"
         if text == "":
             text = "No changes in timetable."
-
         print text
         success, push = pb_user.push_note("Rooster wijzigingen", text)
 

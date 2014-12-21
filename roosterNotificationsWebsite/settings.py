@@ -32,7 +32,6 @@ DEBUG = False
 TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = [
-    'server.lesuitval',
     '146.185.190.19',
     '127.0.0.1',
     'lesuitval.info',
