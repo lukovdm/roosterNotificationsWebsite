@@ -33,7 +33,7 @@
                         <br>
                         2) Look up your leerlingnummer/teacher code
                         <br>
-                        3) Fill in leerlingnummer/teacher code and email address
+                        3) Fill in leerlingnummer/teacher code and email address.
                         <br>
                         That’s all!
                         <br><br>
@@ -50,6 +50,7 @@
                         {% endif %}
 
                         <input placeholder="Leerlingnummer/teacher code" type="text" name="number" class="form-control" required>
+                        <input placeholder="class (ex 5)(only students)" type="text" name="class" class="form-control">
                         <input placeholder="Email" type="email" name="email" class="form-control" required>
                         <button type="submit" class="btn btn-lg btn-primary btn-block btn-success">Add</button>
                     </form>
@@ -64,6 +65,7 @@
                         {% endif %}
 
                         <input placeholder="Leerlingnummer/teacher code" type="number" name="number" class="form-control" required>
+                        <input placeholder="class (ex 5)(only students)" type="text" name="class" class="form-control">
                         <input placeholder="Email" type="email" name="email" class="form-control" required>
                         <button type="submit" class="btn btn-lg btn-primary btn-block btn-danger">Delete</button>
                     </form>

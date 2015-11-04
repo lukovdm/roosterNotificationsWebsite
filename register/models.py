@@ -3,6 +3,7 @@ from django.db import models
 class User(models.Model):
     number = models.IntegerField(max_length=8, default=0000000)
     teacher = models.TextField(max_length=3, default="aaa")
+    class_code = models.TextField(max_length=2, default="")
     email = models.EmailField()
     updated = models.DateTimeField()
     student = models.BooleanField(default=True)

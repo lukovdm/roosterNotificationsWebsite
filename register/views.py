@@ -21,15 +21,15 @@ class InfoView(generic.TemplateView):
     template_name = 'register/info.html'
 
 def add(request):
-    # #pre validation field 2
-    # if len(request.POST["class"]) == 2:
-    #     class0_is_digit = unicode.isdecimal(request.POST["class"][0])
-    #     class1_is_alpha = unicode.isalpha(request.POST["class"][1])
-    # elif len(request.POST["class"]) == 1:
-    #     class0_is_digit = unicode.isdecimal(request.POST["class"])
-    # else:
-    #     class0_is_digit = True
-    #     class1_is_alpha = True
+    #pre validation field 2
+    if len(request.POST["class"]) == 2:
+        class0_is_digit = unicode.isdecimal(request.POST["class"][0])
+        class1_is_alpha = unicode.isalpha(request.POST["class"][1])
+    elif len(request.POST["class"]) == 1:
+        class0_is_digit = unicode.isdecimal(request.POST["class"])
+    else:
+        class0_is_digit = True
+        class1_is_alpha = True
 
     #validate field 1
     if not unicode.isdecimal(request.POST["number"]) and not unicode.isalpha(request.POST["number"] or not len(request.POST["number"]) == 3):
@@ -40,10 +40,10 @@ def add(request):
         else:
             messages.error(request, "Please enter a valid leerlingnumber.", extra_tags="Add")
 
-    # #validate field 2
-    # elif not 2 >= len(request.POST["class"]) >= 0 and not class0_is_digit and not class1_is_alpha:
-    #
-    #     messages.error(request, "Please enter a valid class", extra_tags="Add")
+    #validate field 2
+    elif not 2 >= len(request.POST["class"]) >= 0 and not class0_is_digit and not class1_is_alpha:
+
+        messages.error(request, "Please enter a valid class", extra_tags="Add")
 
     #validate field 3
     elif not "@" in request.POST["email"]:
@@ -58,18 +58,19 @@ def add(request):
             user = User(teacher=request.POST["number"], email=request.POST["email"], updated=datetime.datetime.now() - datetime.timedelta(days=30), student=False)
         #student?
         else:
-            user = User(number=request.POST["number"], email=request.POST["email"], updated=datetime.datetime.now() - datetime.timedelta(days=30), student=True)
+            user = User(number=request.POST["number"], email=request.POST["email"],class_code=request.POST["class"] ,updated=datetime.datetime.now() - datetime.timedelta(days=30), student=True)
 
         #pushbullet
         pb = registerPushbullet()
         success, pb_user = pb.new_contact(str(user.teacher) if unicode.isalpha(request.POST["number"]) and len(request.POST["number"]) == 3 else str(user.number), str(user.email))
+
         try:
             pb_user.push_note("Welcome to lesuitval.info " + str(request.POST["number"]), "Timetable updates will follow automatically.")
         except:
             messages.error(request, "Email already in use.", extra_tags="Add")
         else:
             user.save()
-            messages.success(request, "%s succesfully added with email: %s" % (request.POST["number"], request.POST["email"]), extra_tags="AddSucces")
+            messages.success(request, "%s succesfully added with email: %s and class: %s" % (request.POST["number"], request.POST["email"], request.POST["class"]), extra_tags="AddSucces")
 
     return HttpResponseRedirect(reverse('register:index'))
 
@@ -98,5 +99,5 @@ def remove(request):
                 User.objects.filter(teacher=request.POST["number"]).filter(email=request.POST["email"]).delete()
             else:
                 User.objects.filter(number=request.POST["number"]).filter(email=request.POST["email"]).delete()
-            messages.success(request, "%s succesfully deteled with email: %s" % (request.POST["number"], request.POST["email"]), extra_tags="DeleteSucces")
+            messages.success(request, "%s succesfully deleted with email: %s" % (request.POST["number"], request.POST["email"]), extra_tags="DeleteSucces")
     return HttpResponseRedirect(reverse('register:index'))

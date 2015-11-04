@@ -1,6 +1,6 @@
 import urllib2, re
 from datetime import datetime, timedelta
-from pushbullet import PushBullet
+from pushbullet.pushbullet import PushBullet
 from operator import itemgetter
 import sqlite3
 
@@ -14,14 +14,18 @@ pb = PushBullet(key)
 
 for user in cur.execute('SELECT * FROM register_user'):
     print user
-    student = bool(user[4])
-    email = user[1]
+    student = bool(user[3])
+    email = user[7]
     if student:
-        iden = user[3]
-        url = "http://gepro.nl/roosters/rooster.php?leerling=" + str(
-            iden) + "&type=Leerlingrooster&afdeling=schooljaar2014-2015_OVERIG&wijzigingen=1&school=1814&tabblad=1"
+        iden = user[2]
+        class_code = user[6]
+        if int(class_code[0]) <= 2:
+            url = "http://gepro.nl/roosters/rooster.php?klassen%5B%5D=y" + str(class_code) + "&type=Klasrooster&wijzigingen=1&school=1814"
+        else:
+            url = "http://gepro.nl/roosters/rooster.php?leerling=" + str(
+                iden) + "&type=Leerlingrooster&afdeling=y" + str(class_code) + "&wijzigingen=1&school=1814&tabblad=1"
     else:
-        iden = user[5]
+        iden = user[4]
         url = "http://gepro.nl/roosters/rooster.php?docenten%5B%5D=" + str(
             iden) + "&type=Docentrooster&wijzigingen=1&school=1814"
     htmlPage = urllib2.urlopen(url).read()
@@ -29,7 +33,7 @@ for user in cur.execute('SELECT * FROM register_user'):
     lastChangedPat = re.compile('([0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9] [0-9]+:[0-9][0-9]:[0-9][0-9])')
     dateStr = re.search(lastChangedPat, htmlPage).group()
     date = datetime.strptime(dateStr, "%d-%m-%Y %H:%M:%S")
-    db_date = datetime.strptime(str(user[2]), "%Y-%m-%d %H:%M:%S.%f")
+    db_date = datetime.strptime(str(user[1]), "%Y-%m-%d %H:%M:%S.%f")
     if date - db_date < timedelta():
         print "nothing new for " + str(iden)
         continue
@@ -81,7 +85,7 @@ for user in cur.execute('SELECT * FROM register_user'):
         if text == "":
             text = "No changes in timetable."
 
-        if user[6] == text:
+        if user[5] == text:
             print "time changed, no update"
         else:
             if student:
